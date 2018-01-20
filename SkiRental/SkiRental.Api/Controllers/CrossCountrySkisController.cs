@@ -1,27 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using SkiRental.Api;
+using SkiRental.Api.Calculators;
+using SkiRental.Api.Validators;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Results;
 
 namespace SkiRentalApi.Web.Controllers
 {
+    [RoutePrefix("crosscountryskis")]
     public class CrossCountrySkisController : ApiController
     {
-        //private readonly ICrossCountrySkisRequestValidator
+        private readonly IValidationHelper _validator;
+        private readonly ISkiLengthCalculator _calculator;
 
-        public IHttpActionResult Get(decimal length, int age, CrossCountrySkiType type)
+        public CrossCountrySkisController(IValidationHelper validationHelper, ISkiLengthCalculator calculator)
         {
-
-
-            return Ok();
+            _validator = validationHelper;
+            _calculator = calculator;
         }
 
-        public enum CrossCountrySkiType
+        [HttpGet]
+        [Route("calculateLength")]
+        public IHttpActionResult GetSkiLength([FromUri] int height, [FromUri] int age, [FromUri] CrossCountrySkiType type)
         {
-            Classic = 1,
-            Skate = 2
+            var validatonResult = _validator.ValidateRequest(height, age, type);
+            if (validatonResult.Errors.Any())
+            {
+                return Content(HttpStatusCode.BadRequest, validatonResult);
+            }
+
+            var dto = _calculator.CalculateLength(height, age, type);
+
+            return Ok(dto);
         }
     }
 }

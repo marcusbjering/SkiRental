@@ -1,4 +1,6 @@
-﻿using SkiRentalApi.Web.App_Start;
+﻿using SkiRental.Api.Calculators;
+using SkiRental.Api.Validators;
+using SkiRentalApi.Web.App_Start;
 using System.Web.Http;
 using Unity;
 
@@ -17,7 +19,8 @@ namespace SkiRentalApi.Web
 
         private static void RegisterTypes(UnityContainer container)
         {
-            //container.RegisterType<>();
+            container.RegisterType<IValidationHelper, ValidationHelper>();
+            container.RegisterType<ISkiLengthCalculator, SkiLengthCalculator>();
         }
     }
 }
