@@ -4,10 +4,12 @@ using SkiRental.Api.Validators;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.Results;
 
 namespace SkiRentalApi.Web.Controllers
 {
+    [EnableCors(origins: "http://localhost:9000", headers: "*", methods: "*")]
     [RoutePrefix("crosscountryskis")]
     public class CrossCountrySkisController : ApiController
     {

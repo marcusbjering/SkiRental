@@ -14,6 +14,7 @@ namespace SkiRentalApi.Web
 
             RegisterTypes(container);
             config.DependencyResolver = new UnityResolver(container);
+            config.EnableCors();
             config.MapHttpAttributeRoutes();
         }
 
