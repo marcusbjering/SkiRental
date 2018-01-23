@@ -2,6 +2,7 @@
 using SkiRental.Api.Validators;
 using SkiRentalApi.Web.App_Start;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using Unity;
 
 namespace SkiRentalApi.Web
@@ -11,11 +12,13 @@ namespace SkiRentalApi.Web
         public static void Register(HttpConfiguration config)
         {
             var container = new UnityContainer();
-
             RegisterTypes(container);
             config.DependencyResolver = new UnityResolver(container);
-            config.EnableCors();
+
             config.MapHttpAttributeRoutes();
+
+            var corsAttr = new EnableCorsAttribute("http://localhost:9000", "*", "*");
+            config.EnableCors(corsAttr);
         }
 
         private static void RegisterTypes(UnityContainer container)
